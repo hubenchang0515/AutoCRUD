@@ -1,0 +1,36 @@
+{
+    "table" : "User",
+    "columns" : 
+    [
+        {
+            "name" : "username",
+            "type" : "String(64)",
+            "props" : {
+                "index" : true,
+                "unique" : true,
+                "nullable" : false
+            }
+        },
+
+        {
+            "name" : "password",
+            "type" : "Md5",
+            "props" : {
+                "index" : true,
+                "unique" : true,
+                "nullable" : false,
+                "public" : false
+            }
+        },
+
+        {
+            "name" : "email",
+            "type" : "String(64)",
+            "props" : {
+                "index" : true,
+                "unique" : true,
+                "nullable" : false
+            }
+        }
+    ]
+}
