@@ -9,4 +9,4 @@
 | `nullable` | `true`  |  是否可以位空 | 
 | `unique`   | `false` |  是否创建唯一性约束 | 
 | `default`  | `null`  |  默认值 | 
-| `public`   | `true`  |  公开，即可以被检索 |
+| `private`  | `false` |  是否为私有，即返回数据不包含此字段 |

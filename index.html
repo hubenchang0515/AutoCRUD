@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>测试</title>
+        <script>
+        async function GetJson(response) {
+            try {
+                let copy = response.clone()
+                return await copy.json()
+            } catch(err) {
+                return await response.text()
+            }
+        }
+
+        async function GetAsync(url, param) {
+            let args = {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+                body: JSON.stringify(param)
+            }
+
+            let response = await fetch(url, args)
+            let data = await GetJson(response)
+            return [data, response.status, response.statusText]
+        }
+
+        async function PostAsync(url, param) {
+            let args = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+                body: param ? JSON.stringify(param) : null
+            }
+
+            let response = await fetch(url, args)
+            let data = await GetJson(response)
+            return [data, response.status, response.statusText]
+        }
+        </script>
+    </head>
+    <body>
+        <noscript>
+            <h1>
+                当前浏览器不支持JavaScript，请更换浏览器。
+            </h1>
+        </noscript>
+        <h1>
+            测试
+        </h1>
+        <p>
+            此页面用于后端接口测试，请打开“调试控制台”，使用 PostAsync 或 GetAsync 发起请求。
+        </p>
+    </body>
+</html>

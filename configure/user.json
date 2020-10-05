@@ -17,9 +17,9 @@
             "type" : "Md5",
             "props" : {
                 "index" : true,
-                "unique" : true,
+                "unique" : false,
                 "nullable" : false,
-                "public" : false
+                "private" : true
             }
         },
 
@@ -29,7 +29,7 @@
             "props" : {
                 "index" : true,
                 "unique" : true,
-                "nullable" : false
+                "nullable" : true
             }
         }
     ]

@@ -1,7 +1,7 @@
 from flask import Flask
 import os
 
-from .database import db, toDict
+from .database import db, filterDict, convertDbModel
 from .app import app, getJson
 
 def init(sql_url:str):

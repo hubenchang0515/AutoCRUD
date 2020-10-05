@@ -21,7 +21,7 @@ class Md5(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         m = hashlib.md5()
-        m.update(value)
+        m.update(value.encode("utf8"))
         return m.hexdigest()
 
     def process_result_value(self, value, dialect):

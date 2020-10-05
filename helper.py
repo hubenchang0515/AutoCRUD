@@ -9,7 +9,7 @@ def setDefaults(columns):
         "unique" : False,
         "nullable" : True,
         "default" : None,
-        "public" : True,
+        "private" : False,
     }
 
     for column in columns:

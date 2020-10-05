@@ -1,38 +1,33 @@
-from flask_sqlalchemy import SQLAlchemy 
-from flask_sqlalchemy.type import TypeDecorator, String, Text
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.types import TypeDecorator, String, Text
 import hashlib
 
 db = SQLAlchemy()
 
-def toDict(args):
-    if isinstance(args, db.Model) :
-        ret = args.__dict__
-        if "_sa_instance_state" in ret:
-            del ret["_sa_instance_state"]
-        return ret
+def filterDict(inputDict, keys):
+    for key in keys:
+        if key in inputDict:
+            del inputDict[key]
+    return inputDict
 
-    elif isinstance(args, list):
-        ret = []
-        for arg in args :
-            if isinstance(arg, db.Model) :
-                dict = arg.__dict__
-                if "_sa_instance_state" in dict:
-                    del dict["_sa_instance_state"]
-                ret.append(dict)
-        return ret
-
+def convertDbModel(arg, filterKeys):
+    if isinstance(arg, db.Model) :
+        tmp = arg.__dict__
+        if "_sa_instance_state" in tmp:
+            del tmp["_sa_instance_state"]
+        return convertDbModel(tmp, filterKeys)
+    elif isinstance(arg, dict):
+        if "_sa_instance_state" in arg:
+            del arg["_sa_instance_state"]
+        arg = filterDict(arg, filterKeys)
+        for key in arg:
+            arg[key] = convertDbModel(arg[key], filterKeys)
+        return arg
+    elif isinstance(arg, list):
+        tmp = []
+        for subArg in arg:
+            tmp.append(convertDbModel(subArg, filterKeys))
+        return tmp
     else:
-        return args
+        return arg
 
-
-class Md5(TypeDecorator):
-    
-    impl = String(32)
-    
-    def process_bind_param(self, value, dialect):
-        m = hashlib.md5()
-        m.update(value)
-        return m.hexdigest()
- 
-    def process_result_value(self, value, dialect):
-        return value

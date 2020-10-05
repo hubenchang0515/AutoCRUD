@@ -14,7 +14,8 @@ env = Environment(
     autoescape=select_autoescape(enabled_extensions="py")
 )
 modelTemplate = env.get_template("model.py")
-handlerTemplate = env.get_template("handler.py")
+methodsTemplate = env.get_template("methods.py")
+handlersTemplate = env.get_template("handlers.py")
 
 # 生成
 handlersList = []
@@ -40,22 +41,28 @@ for filename in fileList:
     with open(modelFile, "w+") as fp:
         fp.write(model)
 
-    # 创建handler
-    handlerFile = os.path.join(moduleDir, "handler.py")
-    handler = handlerTemplate.render(MODULE_NAME=moduleName, COLUMNS=data["columns"])
-    with open(handlerFile, "w+") as fp:
-        fp.write(handler)
+    # 创建methods
+    methodsFile = os.path.join(moduleDir, "methods.py")
+    methods = methodsTemplate.render(MODULE_NAME=moduleName, COLUMNS=data["columns"])
+    with open(methodsFile, "w+") as fp:
+        fp.write(methods)
+
+    # 创建handlers
+    handlersFile = os.path.join(moduleDir, "handlers.py")
+    handlers = handlersTemplate.render(MODULE_NAME=moduleName, COLUMNS=data["columns"])
+    with open(handlersFile, "w+") as fp:
+        fp.write(handlers)
 
     print("Created module '%s'" % moduleName)
-    handlersList.append("modules.%s.handler" % moduleName)
+    handlersList.append("modules.%s.handlers" % moduleName)
 
 # 创建一个import所有handler的文件
 handlersListFile = os.path.join(BUILD_DIR, "handlers.py")
 handlersListTemplate = Template("{% for handler in handlersList %}import {{handler}}\n{% endfor %}")
 handlers = handlersListTemplate.render(handlersList=handlersList)
-with open(handlerFile, "w+") as fp:
+with open(handlersListFile, "w+") as fp:
         fp.write(handlers)
 
 # 复制基础文件
-copy_tree("./basic/common", BUILD_DIR)
+copy_tree("./basic/common", os.path.join(BUILD_DIR, "common"))
 shutil.copy("./basic/main.py", BUILD_DIR)
